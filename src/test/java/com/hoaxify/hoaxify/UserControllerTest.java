@@ -23,6 +23,7 @@ public class UserControllerTest {
   @Autowired
   TestRestTemplate testRestTemplate;
 
+  // methodName_condition_expectedResult
   @Test
   public void postUser_whenUserIsValid_receiveOk() {
     User user = new User();
