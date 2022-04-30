@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.hoaxify.hoaxify.error.ApiError;
 import com.hoaxify.hoaxify.shared.GenericResponse;
 import com.hoaxify.hoaxify.user.User;
 import com.hoaxify.hoaxify.user.UserRepository;
@@ -175,6 +176,20 @@ public class UserControllerTest {
     user.setPassword("1234567890");
     ResponseEntity<Object> response = postSignup(user, Object.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+  }
+
+  @Test
+  public void postUSer_whenUserIsInvalid_receiveApiError() {
+    User user = new User();
+    ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+    assertThat(response.getBody().getUrl()).isEqualTo(API_1_0_USERS);
+  }
+
+  @Test
+  public void postUSer_whenUserIsInvalid_receiveApiErrorWithValidationErrors() {
+    User user = new User();
+    ResponseEntity<ApiError> response = postSignup(user, ApiError.class);
+    assertThat(response.getBody().getValidationErrors().size()).isEqualTo(3);
   }
 
   private User createValidUser() {
